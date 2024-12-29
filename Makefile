@@ -29,15 +29,5 @@ deps:
 	@go mod tidy
 	@go install github.com/a-h/templ/cmd/templ@latest
 
-# Create database
-db-create:
-	@echo "Creating database..."
-	@createdb linklite
-
-# Drop database
-db-drop:
-	@echo "Dropping database..."
-	@dropdb linklite
-
 # Development mode: generate templates and run
 dev: generate run
