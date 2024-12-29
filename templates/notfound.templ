@@ -1,0 +1,20 @@
+package templates
+
+templ NotFound(shortCode string) {
+	@base() {
+		<section class="nes-container with-title">
+			<h1 class="title">404 - Not Found</h1>
+			<div class="message-list">
+				<div class="message -left">
+					<div class="nes-balloon from-left">
+						<p>Oops! The URL with code "{ shortCode }" was not found!</p>
+					</div>
+				</div>
+				<i class="nes-octocat animate"></i>
+			</div>
+			<div style="text-align: center; margin-top: 2rem;">
+				<a href="/" class="nes-btn is-primary">Go Back Home</a>
+			</div>
+		</section>
+	}
+}

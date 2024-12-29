@@ -1,0 +1,138 @@
+package templates
+
+templ base() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>LinkLite - URL Shortener</title>
+			<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"/>
+			<link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet"/>
+			<style>
+				body {
+					padding: 2rem;
+					background-color: #f8f8f8;
+					font-family: 'Press Start 2P', cursive;
+				}
+				.container {
+					max-width: 980px;
+					margin: 0 auto;
+				}
+				.url-form {
+					margin: 2rem 0;
+				}
+				.result {
+					margin-top: 2rem;
+					word-break: break-all;
+				}
+				.title {
+					margin-bottom: 2rem;
+				}
+				.nes-container {
+					margin-top: 2rem;
+				}
+				.header-container {
+					display: flex;
+					align-items: center;
+					gap: 1rem;
+					margin-bottom: 2rem;
+				}
+				.animate {
+					animation: bounce 0.3s ease infinite;
+				}
+				@keyframes bounce {
+					0%, 100% { transform: translateY(0); }
+					50% { transform: translateY(-3px); }
+				}
+				.form-container {
+					background: #fff;
+					padding: 2rem;
+					border-radius: 4px;
+				}
+				.footer {
+					margin-top: 2rem;
+					text-align: center;
+					font-size: 0.8em;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				{ children... }
+				<div class="footer">
+					<p>Made with <i class="nes-icon is-small heart"></i> using Go</p>
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+type IndexData struct {
+	ShortenedURL string
+	Error        string
+}
+
+templ Index(data IndexData) {
+	@base() {
+		<div class="header-container">
+			<i class="nes-icon coin is-large"></i>
+			<h1>LinkLite</h1>
+		</div>
+		
+		<div class="nes-container with-title">
+			<span class="title">URL Shortener</span>
+			
+			<div class="form-container">
+				<div class="nes-container is-rounded with-title">
+					<span class="title">Enter URL</span>
+					<form method="POST" action="/" class="url-form">
+						<div class="nes-field">
+							<label for="url">Long URL</label>
+							<input 
+								type="url" 
+								id="url" 
+								name="url" 
+								class="nes-input" 
+								placeholder="https://example.com/very/long/url" 
+								required
+							/>
+						</div>
+						<button type="submit" class="nes-btn is-primary" style="margin-top: 1rem;">
+							<i class="nes-icon star is-small"></i> Shorten URL
+						</button>
+					</form>
+				</div>
+			</div>
+			
+			if data.Error != "" {
+				<div class="nes-container is-rounded is-error" style="margin-top: 1rem;">
+					<div class="message-list">
+						<div class="message -left">
+							<i class="nes-bcrikko"></i>
+							<div class="nes-balloon from-left is-error">
+								<p>{ data.Error }</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+			
+			if data.ShortenedURL != "" {
+				<div class="nes-container is-rounded is-success result">
+					<div class="message-list">
+						<div class="message -left">
+							<i class="nes-icon trophy is-large"></i>
+							<div class="nes-balloon from-left is-success">
+								<p>Your shortened URL is ready!</p>
+								<a href={ templ.SafeURL(data.ShortenedURL) } class="nes-text is-primary">
+									{ data.ShortenedURL }
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	}
+}
